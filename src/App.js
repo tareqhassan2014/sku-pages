@@ -1,12 +1,11 @@
-import './App.css';
-import Dashboard from './Pages/dashboard/Dashboard';
+import Watchlist from "./Pages/watchlist/Watchlist";
 
 
 function App() {
   return (
-    <div className="App">
-      <Dashboard/>
-    </div>
+    <>
+      <Watchlist/>
+    </>
   );
 }
 

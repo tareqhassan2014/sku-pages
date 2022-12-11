@@ -74,7 +74,7 @@ const DataStorage = () => {
                       />
                     </Box>
                     <Typography sx={{ fontSize: "10px", pb: 2 }}>
-                      $319.54B{" "}
+                    <span style={{ fontWeight: "bold" }}> $319.54B </span>
                       <span style={{ fontSize: "8px", color: "red" }}>
                         -12.41% <HiArrowDownRight />
                       </span>
@@ -124,7 +124,7 @@ const DataStorage = () => {
                       />
                     </Box>
                     <Typography sx={{ fontSize: "10px", pb: 2 }}>
-                      <span style={{ fontWeight: "bold" }}> $319.54B</span>
+                      <span style={{ fontWeight: "bold" }}> $319.54B </span>
                       <span style={{ fontSize: "8px", color: "green" }}>
                         0.64% <HiArrowUpRight />
                       </span>
@@ -174,7 +174,7 @@ const DataStorage = () => {
                       />
                     </Box>
                     <Typography sx={{ fontSize: "10px", pb: 2 }}>
-                      <span style={{ fontWeight: "bold" }}> $319.54B</span>
+                      <span style={{ fontWeight: "bold" }}> $319.54B </span>
                       <span style={{ fontSize: "8px", color: "green" }}>
                         0.64% <HiArrowUpRight />
                       </span>
@@ -224,7 +224,7 @@ const DataStorage = () => {
                       />
                     </Box>
                     <Typography sx={{ fontSize: "10px", pb: 2 }}>
-                      <span style={{ fontWeight: "bold" }}> $319.54B</span>
+                      <span style={{ fontWeight: "bold" }}> $319.54B </span>
                       <span style={{ fontSize: "8px", color: "green" }}>
                         0.64% <HiArrowUpRight />
                       </span>

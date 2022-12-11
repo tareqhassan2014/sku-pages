@@ -5,14 +5,42 @@ import { styled } from "@mui/material/styles";
 import {
   Button,
   FormControl,
+  IconButton,
   InputBase,
   InputLabel,
   MenuItem,
   Paper,
   Select,
+  TextField,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import AddIcon from "@mui/icons-material/Add";
 import AddNewWatchlist from "./AddNewWatchlist";
+import Edit from "./Edit";
+import Remove from "./Remove";
+import ChooseSKU from "./ChooseSKU";
+import Layout from "./Layout";
+import SkuTable from "./SkuTable";
+import Backdrop from "@mui/material/Backdrop";
+import Modal from "@mui/material/Modal";
+import Fade from "@mui/material/Fade";
+import Typography from "@mui/material/Typography";
+import { useForm } from "react-hook-form";
+
+const styleM = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: { md: "30vw", xs: "90vw", sm: "90vw" },
+  bgcolor: "white",
+  //   border: "1px solid #000",
+  borderRadius: 1,
+  boxShadow: 0,
+  px: 3,
+  py: 1,
+};
 
 /* Paper style */
 const Item = styled(Paper)(({ theme }) => ({
@@ -53,83 +81,290 @@ const WatchlistTable = () => {
 
   // Pop -Up Layout
   const [layout, setLayout] = useState(false);
+  const [scroll, setScroll] = useState("paper");
   const handleCloseLayout = () => setLayout(false);
-  const handleShowLayout = () => setLayout(true);
+  const handleShowLayout = (scrollType) => () => {
+    setLayout(true);
+    setScroll(scrollType);
+  };
+
+  /* New */
+  const { register, handleSubmit, reset } = useForm();
+  const [newD, setNewD] = useState("");
+  const [data, setData] = useState("");
+  const [openNew, setOpenNew] = useState(false);
+  const handleCloseNewD = () => setOpenNew(false);
+  const handleShowNewD = () => setOpenNew(true);
   return (
     <>
       <Box sx={{ border: "1px solid #ced4da", borderRadius: 1, m: 5 }}>
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={{ xs: 1, sm: 2, md: 2 }}
-          sx={{ m: 3 }}
-        >
-          <Item>
-            <Paper
-              component="form"
-              sx={{
-                p: "2px 0px",
-                display: "flex",
-                alignItems: "center",
-                maxWidth: "300px",
-                height: "35px",
-                mb: 2,
-                boxShadow: 0,
-                border: "1px solid #ced4da",
-                borderRadius: 1,
-              }}
-            >
-              <Button
-                sx={{ py: 1 }}
-                size="small"
-                variant="contained"
-                aria-label="search"
+        {data ? (
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={{ xs: 1, sm: 1, md: 1 }}
+            sx={{ m: 3 }}
+          >
+            <Item>
+              <Paper
+                component="form"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  maxWidth: "300px",
+                  boxShadow: 0,
+                  border: "1px solid #ced4da",
+                  borderRadius: 1,
+                }}
               >
-                <SearchIcon />
-              </Button>
+                <Button
+                  sx={{ px: 0 }}
+                  size="small"
+                  variant="contained"
+                  aria-label="search"
+                >
+                  <SearchIcon />
+                </Button>
 
-              <InputBase
-                sx={{ ml: 1, flex: 1 }}
-                type="search"
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
+                <InputBase
+                  sx={{ ml: 1, flex: 1 }}
+                  type="search"
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                  }}
+                  placeholder="Search SKU"
+                />
+              </Paper>
+            </Item>
+            <Item>
+              <FormControl
+                sx={{ minWidth: { xs: "100%", md: 250 } }}
+                size="small"
+              >
+                <InputLabel sx={{ fontSize: "13px" }} id="demo-select-small">
+                  Select
+                </InputLabel>
+                <Select
+                  sx={{ fontSize: "13px", textTransform: "capitalize" }}
+                  labelId="demo-select-small"
+                  value={select}
+                  label="select"
+                  onChange={(e) => {
+                    setSelect(e.target.value);
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value="Amazon">Amazon</MenuItem>
+                  <MenuItem value="None">Noon</MenuItem>
+                  <MenuItem value="None">Noon</MenuItem>
+                </Select>
+              </FormControl>
+            </Item>
+            <Item>
+              <Button
+                sx={{
+                  minWidth: {
+                    xs: "100%",
+                    border: "1px solid #ced4da",
+                    fontSize: "13px",
+                    textTransform: "capitalize",
+                  },
                 }}
-                placeholder="Search SKU"
+                color="inherit"
+                onClick={handleShowNew}
+              >
+                Add New Watchlist
+              </Button>
+              <AddNewWatchlist
+                addNew={addNew}
+                handleCloseNew={handleCloseNew}
               />
-            </Paper>
-          </Item>
-          <Item>
-            <FormControl sx={{ minWidth: 120 }} size="small">
-              <InputLabel id="demo-select-small">Select</InputLabel>
-              <Select
-                labelId="demo-select-small"
-                value={select}
-                label="select"
-                onChange={(e) => {
-                  setSelect(e.target.value);
+            </Item>
+            <Item>
+              <Button
+                sx={{
+                  minWidth: {
+                    xs: "100%",
+                    border: "1px solid #ced4da",
+                    fontSize: "13px",
+                    textTransform: "capitalize",
+                  },
+                }}
+                color="inherit"
+                onClick={handleShowSKU}
+              >
+                Choose SKU/ ASIN/ MPN
+              </Button>
+              <ChooseSKU
+                chooseSKU={chooseSKU}
+                handleCloseSKU={handleCloseSKU}
+              />
+            </Item>
+            <Item>
+              <Button
+                sx={{
+                  minWidth: { xs: "100%", md: 70 },
+                  border: "1px solid #ced4da",
+                  fontSize: "13px",
+                  textTransform: "capitalize",
+                }}
+                color="inherit"
+                onClick={handleShowEdit}
+              >
+                Edit
+              </Button>
+              <Edit edit={edit} handleCloseEdit={handleCloseEdit} />
+            </Item>
+            <Item>
+              <Button
+                sx={{
+                  minWidth: { xs: "100%" },
+                  border: "1px solid #ced4da",
+                  fontSize: "13px",
+                  textTransform: "capitalize",
+                }}
+                color="inherit"
+                onClick={handleShowRemove}
+              >
+                Remove
+              </Button>
+              <Remove remove={remove} handleCloseRemove={handleCloseRemove} />
+            </Item>
+            <Item>
+              <Button
+                sx={{
+                  minWidth: { xs: "100%" },
+                  border: "1px solid #ced4da",
+                  fontSize: "13px",
+                  textTransform: "capitalize",
+                }}
+                color="inherit"
+                onClick={handleShowLayout("paper")}
+              >
+                Layout
+              </Button>
+              <Layout
+                layout={layout}
+                handleCloseLayout={handleCloseLayout}
+                scroll={scroll}
+              />
+            </Item>
+          </Stack>
+        ) : (
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={{ xs: 1, sm: 1, md: 1 }}
+            sx={{ m: 3 }}
+          >
+            <Item>
+              <Button
+                variant="outlined"
+                startIcon={<AddIcon />}
+                sx={{
+                  minWidth: { xs: "100%" },
+                  fontSize: "13px",
+                  textTransform: "capitalize",
+                }}
+                onClick={handleShowNewD}
+              >
+                New
+              </Button>
+              <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={openNew}
+                onClose={handleCloseNewD}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                  timeout: 500,
                 }}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value="Amazon">Amazon</MenuItem>
-                <MenuItem value="None">Noon</MenuItem>
-                <MenuItem value="None">Noon</MenuItem>
-              </Select>
-            </FormControl>
-          </Item>
-          <Item>
-          <Button color="inherit" variant="outlined" onClick={handleShowNew}>Add New Watchlist</Button>
-          <AddNewWatchlist
-          addNew={addNew}
-          handleShowNew={handleShowNew}
-          handleCloseNew={handleCloseNew}
-          />
-          </Item>
-          <Item>Item 3</Item>
-          <Item>Item 3</Item>
-          <Item>Item 3</Item>
-        </Stack>
+                <Fade in={openNew}>
+                  <Box sx={styleM}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        mb: 1,
+                      }}
+                    >
+                      <Typography
+                        id="transition-modal-title"
+                        variant="h6"
+                        component="h2"
+                      >
+                        New watchlist
+                      </Typography>
+                      <IconButton color="error" onClick={handleCloseNewD}>
+                        <CloseOutlinedIcon />
+                      </IconButton>
+                    </Box>
+                    <form
+                      onSubmit={handleSubmit((data) => {
+                        setData(JSON.stringify(data));
+                        reset();
+                      })}
+                    >
+                      <TextField
+                        fullWidth
+                        sx={{ mt: 2, mb: 5 }}
+                        id="outlined-basic"
+                        label="Enter Watchlist Title"
+                        variant="outlined"
+                        {...register("newData")}
+                        value={newD}
+                        onChange={(e) => {
+                          setNewD(e.target.value);
+                          console.log(newD);
+                        }}
+                      />
+                      <Box sx={{ textAlign: "end", mb: 2 }}>
+                        {newD ? (
+                          <Button
+                            size="small"
+                            sx={{ mx: 2 }}
+                            variant="contained"
+                            color="inherit"
+                            type="submit"
+                          >
+                            Create
+                          </Button>
+                        ) : (
+                          <Button
+                            disabled
+                            size="small"
+                            sx={{ mx: 2 }}
+                            variant="contained"
+                            color="inherit"
+                            type="submit"
+                          >
+                            Create
+                          </Button>
+                        )}
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          color="error"
+                          onClick={handleCloseNewD}
+                        >
+                          Cancel
+                        </Button>
+                      </Box>
+                    </form>
+                  </Box>
+                </Fade>
+              </Modal>
+            </Item>
+          </Stack>
+        )}
+
+        <Box sx={{ my: 4 }}>
+          <SkuTable />
+        </Box>
       </Box>
     </>
   );

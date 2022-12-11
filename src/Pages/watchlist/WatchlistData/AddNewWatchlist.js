@@ -21,7 +21,7 @@ const style = {
   py: 1,
 };
 
-const AddNewWatchlist = ({ addNew, handleCloseNew, handleShowNew }) => {
+const AddNewWatchlist = ({ addNew, handleCloseNew }) => {
   const [title, setTitle] = useState("");
   return (
     <>

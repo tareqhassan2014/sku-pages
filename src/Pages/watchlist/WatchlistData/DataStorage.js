@@ -16,12 +16,11 @@ const DataStorage = () => {
     height: 10,
     borderRadius: 5,
     [`&.${linearProgressClasses.colorPrimary}`]: {
-      backgroundColor:
-        theme.palette.error.dark[theme.palette.mode === "light" ? 200 : 800],
+      backgroundColor: "red",
     },
     [`& .${linearProgressClasses.bar}`]: {
       borderRadius: 5,
-      backgroundColor: theme.palette.mode === "light" ? "#4caf50" : "#308fe8",
+      backgroundColor: theme.palette.mode === "light" ? "#4caf50" : "red",
     },
   }));
 
@@ -273,7 +272,7 @@ const DataStorage = () => {
                     </Box>
                   </Grid>
                   <Box sx={{ flexGrow: 1 }}>
-                    <BorderLinearProgress variant="determinate" value={67} />
+                    <BorderLinearProgress sx={{bgColor:"red"}} variant="determinate" value={67} />
                     <Box
                       sx={{
                         display: "flex",

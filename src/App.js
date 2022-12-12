@@ -1,11 +1,9 @@
-import Watchlist from "./Pages/watchlist/Watchlist";
-
+import Alerts from "./Pages/alerts/Alerts";
 
 function App() {
   return (
     <>
-      <Watchlist/>
-      
+      <Alerts/>
     </>
   );
 }

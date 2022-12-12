@@ -43,9 +43,7 @@ const DataStorage = () => {
 
   return (
     <>
-      <Box sx={{ m: 5 }}>
-        <Typography sx={{pb:1}}>My Watchlist</Typography>
-        <Box sx={{ border: "1px solid #ced4da", borderRadius: 1 }}>
+        <Box sx={{ border: "1px solid #ced4da", borderRadius: 1, mx:5, mb:5 }}>
           <Box sx={{ flexGrow: 1, mx: 3, my: 5 }}>
             <Grid container spacing={4}>
               <Grid item xs={12} md={2.4}>
@@ -300,7 +298,6 @@ const DataStorage = () => {
             </Grid>
           </Box>
         </Box>
-      </Box>
     </>
   );
 };

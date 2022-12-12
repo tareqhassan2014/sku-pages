@@ -15,14 +15,18 @@ const style = {
   width: { md: "30vw", xs: "90vw", sm: "90vw" },
   bgcolor: "background.paper",
   //   border: "1px solid #000",
-  borderRadius: 1,
+  borderRadius: 2,
   boxShadow: 0,
   px: 3,
   py: 1,
 };
 
-const Edit = ({ edit, handleCloseEdit }) => {
+const Edit = ({ edit, handleCloseEdit, data, setData, view }) => {
     const [update, setUpdate] = useState("");
+
+    const up = [...data,{name:update}]
+    // console.log(up);
+    
     return (
       <>
         <Modal
@@ -61,16 +65,15 @@ const Edit = ({ edit, handleCloseEdit }) => {
                 fullWidth
                 sx={{ mt: 2, mb: 5 }}
                 id="outlined-basic"
-                label="Your Watchlist"
+                label={view?.name || data[0].name}
                 variant="outlined"
                 value={update}
                 onChange={(e) => {
                   setUpdate(e.target.value);
-                  console.log(update);
                 }}
               />
               <Box sx={{textAlign:'end',mb:2}}>
-                <Button sx={{mx:2}} variant="outlined" color="inherit" onClick={handleCloseEdit}>Update</Button>
+                <Button sx={{mx:2}} variant="outlined" color="inherit">Update</Button>
                 <Button variant="contained" color="error" onClick={handleCloseEdit}>Close</Button>  
               </Box>
             </Box>

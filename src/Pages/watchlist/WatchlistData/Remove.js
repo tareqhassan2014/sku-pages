@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -21,64 +21,74 @@ const style = {
   py: 1,
 };
 
-
-const Remove = ({remove, handleCloseRemove,data,setData}) => {
-    return (
-      <>
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={remove}
-          onClose={handleCloseRemove}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-          <Fade in={remove}>
-            <Box sx={style}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  mb: 1,
+const Remove = ({ remove, handleCloseRemove, data, setData, view }) => {
+ 
+  return (
+    <>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={remove}
+        onClose={handleCloseRemove}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={remove}>
+          <Box sx={style}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: 1,
+              }}
+            >
+              <Typography
+                id="transition-modal-title"
+                variant="h6"
+                component="h2"
+              >
+                Remove watchlist
+              </Typography>
+              <IconButton color="error" onClick={handleCloseRemove}>
+                <CloseOutlinedIcon />
+              </IconButton>
+            </Box>
+            <Typography
+              variant="h6"
+              component="h3"
+              sx={{ mt: 2, mb: 5, color: "GrayText" }}
+            >
+              Are you sure you want to remove '{view?.name || data[0]?.name}' watchlist?
+            </Typography>
+            <Box sx={{ textAlign: "end", mb: 2 }}>
+              <Button
+                sx={{ mx: 2 }}
+                variant="outlined"
+                color="inherit"
+                onClick={() => {
+                  setData(data.filter((a) => a.id !== view?.id));
+                  handleCloseRemove();
                 }}
               >
-                <Typography
-                  id="transition-modal-title"
-                  variant="h6"
-                  component="h2"
-                >
-                  Remove watchlist
-                </Typography>
-                <IconButton color="error" onClick={handleCloseRemove}>
-                  <CloseOutlinedIcon />
-                </IconButton>
-              </Box>
-             <Typography
-                  variant="h6"
-                  component="h3"
-                  sx={{ mt: 2, mb: 5, color:"GrayText" }}
-                >
-                  Are you sure you want to remove '{data[0]?.name}' watchlist?
-                </Typography>
-              <Box sx={{textAlign:'end',mb:2}}>
-                <Button sx={{mx:2}} variant="outlined" color="inherit"onClick={() => {
-              setData(
-                data.filter(a =>
-                  a.id !== data[0].id
-                )
-              );
-            }}>Remove</Button>
-                <Button variant="contained" color="error" onClick={handleCloseRemove}>Close</Button>  
-              </Box>
+                Remove
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={handleCloseRemove}
+              >
+                Close
+              </Button>
             </Box>
-          </Fade>
-        </Modal>
-      </>
-    );
+          </Box>
+        </Fade>
+      </Modal>
+    </>
+  );
 };
 
 export default Remove;

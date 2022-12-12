@@ -3,29 +3,30 @@ import React, { useState } from "react";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import {
+  Autocomplete,
   Button,
   FormControl,
   IconButton,
-  InputBase,
-  InputLabel,
+ /*  InputBase,
+  InputLabel, */
   MenuItem,
+  OutlinedInput,
   Paper,
   Select,
   TextField,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+// import SearchIcon from "@mui/icons-material/Search";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import AddIcon from "@mui/icons-material/Add";
 import AddNewWatchlist from "./AddNewWatchlist";
 import Edit from "./Edit";
 import Remove from "./Remove";
-import ChooseSKU from "./ChooseSKU";
-import Layout from "./Layout";
-import SkuTable from "./SkuTable";
+// import ChooseSKU from "./ChooseSKU";
 import Backdrop from "@mui/material/Backdrop";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
+import DataStorage from "./DataStorage";
 
 const styleM = {
   position: "absolute",
@@ -35,11 +36,44 @@ const styleM = {
   width: { md: "30vw", xs: "90vw", sm: "90vw" },
   bgcolor: "white",
   //   border: "1px solid #000",
-  borderRadius: 1,
+  borderRadius: 2,
   boxShadow: 0,
   px: 3,
   py: 1,
 };
+
+const optn = [
+  { slct: "Bitcoin (BTC)" },
+  { slct: "Ethereum (ETH)" },
+  { slct: "Tether (USDT)" },
+  { slct: "BNB (BNB)" },
+  { slct: "USD Coin (USDC)" },
+  { slct: "Binance USD (BUSD)" },
+  { slct: "XRPL (XRP)" },
+  { slct: "Dogecoin (DOGE)" },
+  { slct: "Cardano (ADA)" },
+  { slct: "Polygon (MATIC)" },
+  { slct: "Polkadot (DOT)" },
+  { slct: "Lido Staked Ether (STETH)" },
+  { slct: "Litecoin (LTC)" },
+  { slct: "SHIBA INU (SHIB)" },
+  { slct: "OKB (OKB)" },
+  { slct: "Dai (DAI)" },
+  { slct: "TRON (TRX)" },
+  { slct: "Solana (SOL)" },
+  { slct: "Uniswap (UNI)" },
+  { slct: "Avalanche (AVAX)" },
+  { slct: "Wrapped Bitcoin (WBTC)" },
+  { slct: "UNUS SED LEO (LEO)" },
+  { slct: "ChainLink (LINK)" },
+  { slct: "Toncoin (TON)" },
+  { slct: "Cosmos (ATOM)" },
+  { slct: "Monero (XMR)" },
+  { slct: "Ethereum Classic (ETC)" },
+  { slct: "Stellar (XLM)" },
+  { slct: "Bitcoin Cash (BCH)" },
+  { slct: "Quant (QNT)" },
+];
 
 /* Paper style */
 const Item = styled(Paper)(({ theme }) => ({
@@ -64,9 +98,9 @@ const WatchlistTable = () => {
   const handleCloseNew = () => setAddNew(false);
   const handleShowNew = () => setAddNew(true);
   // Pop -Up chooseSKU
-  const [chooseSKU, setChooseSKU] = useState(false);
+/*   const [chooseSKU, setChooseSKU] = useState(false);
   const handleCloseSKU = () => setChooseSKU(false);
-  const handleShowSKU = () => setChooseSKU(true);
+  const handleShowSKU = () => setChooseSKU(true); */
 
   // Pop -Up Edit
   const [edit, setEdit] = useState(false);
@@ -78,54 +112,35 @@ const WatchlistTable = () => {
   const handleCloseRemove = () => setRemove(false);
   const handleShowRemove = () => setRemove(true);
 
-  // Pop -Up Layout
-  const [layout, setLayout] = useState(false);
-  const [scroll, setScroll] = useState("paper");
-  const handleCloseLayout = () => setLayout(false);
-  const handleShowLayout = (scrollType) => () => {
-    setLayout(true);
-    setScroll(scrollType);
-  };
-
   /* New */
   const [newD, setNewD] = useState("");
   const [data, setData] = useState("");
-  console.log(data);
+  // console.log(data);
   const [openNew, setOpenNew] = useState(false);
   const handleCloseNewD = () => setOpenNew(false);
   const handleShowNewD = () => setOpenNew(true);
-  let nextId = 0;
+  let traceId = Math.floor(Math.random() * 10000);
+  const [view, setView] = useState(false);
+  // console.log(view);
+
   return (
     <>
-      <Box sx={{ border: "1px solid #ced4da", borderRadius: 1, m: 5 }}>
+    <Box sx={{my:2}}>
+          <Typography sx={{pb:1,mx:5}}>My Watchlist</Typography>
+    </Box>
+    {
+      search?.length !==0 && <DataStorage/>
+    }
         {data?.length ? (
+          
+            <Box sx={{ border: "1px solid #ced4da", borderRadius: 1, mx: 5 }}>
           <Stack
             direction={{ xs: "column", sm: "row" }}
             spacing={{ xs: 1, sm: 1, md: 1 }}
             sx={{ m: 3 }}
           >
             <Item>
-              <Paper
-                component="form"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  maxWidth: "300px",
-                  boxShadow: 0,
-                  border: "1px solid #ced4da",
-                  borderRadius: 1,
-                }}
-              >
-                <Button
-                  sx={{ px: 0 }}
-                  size="small"
-                  variant="contained"
-                  aria-label="search"
-                >
-                  <SearchIcon />
-                </Button>
-
-                <InputBase
+              {/*  <InputBase
                   sx={{ ml: 1, flex: 1 }}
                   type="search"
                   value={search}
@@ -133,35 +148,63 @@ const WatchlistTable = () => {
                     setSearch(e.target.value);
                   }}
                   placeholder="Search SKU"
-                />
-              </Paper>
+                /> */}
+              <Autocomplete
+                id="optn-select-demo"
+                sx={{ minWidth: { xs: "100%", md: 250 } }}
+                options={optn}
+                autoHighlight
+                getOptionLabel={(option) => option.slct}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    value={search}
+                    onBlur={(e) => {
+                      setSearch(e.target.value);
+                    }}
+                    size="small"
+                    placeholder="Search SKU to add"
+                    inputProps={{
+                      ...params.inputProps,
+                      autoComplete: "new-password", // disable autocomplete and autofill
+                    }}
+                  />
+                )}
+              />
             </Item>
             <Item>
               <FormControl
                 sx={{ minWidth: { xs: "100%", md: 250 } }}
                 size="small"
               >
-                <InputLabel sx={{ fontSize: "13px" }} id="demo-select-small">
+                {/*  <InputLabel sx={{ fontSize: "13px" }} id="demo-select-small">
                   Select
-                </InputLabel>
+                </InputLabel> */}
                 <Select
-                  sx={{ fontSize: "13px", textTransform: "capitalize" }}
-                  labelId="demo-select-small"
+                  sx={{
+                    fontSize: "13px",
+                    textTransform: "capitalize",
+                    backgroundColor: "#EFF2F5",
+                    "&:active": { border: "0px" },
+                  }}
                   value={select}
-                  label="select"
+                  input={<OutlinedInput />}
+                  inputProps={{ "aria-label": "Without label" }}
                   onChange={(e) => {
                     setSelect(e.target.value);
                   }}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value="Amazon">Amazon</MenuItem>
-                  {
-                    data?.map(mi=>(
-                      <MenuItem value={mi?.name}>{mi?.name}</MenuItem>
-                    ))
-                  }
+                  {data?.map((mi) => (
+                    <MenuItem
+                      onClick={() => {
+                        setView(mi);
+                      }}
+                      key={mi?.id}
+                      value={mi?.name}
+                    >
+                      {mi?.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Item>
@@ -182,20 +225,19 @@ const WatchlistTable = () => {
               </Button>
               <AddNewWatchlist
                 addNew={addNew}
-                data={data} setData={setData} 
-                nextId={nextId}
+                data={data}
+                setData={setData}
                 handleCloseNew={handleCloseNew}
               />
             </Item>
-            <Item>
+            {/* <Item>
               <Button
                 sx={{
                   minWidth: {
-                    xs: "100%",
+                    xs: "100%"},
                     border: "1px solid #ced4da",
                     fontSize: "13px",
                     textTransform: "capitalize",
-                  },
                 }}
                 color="inherit"
                 onClick={handleShowSKU}
@@ -206,7 +248,7 @@ const WatchlistTable = () => {
                 chooseSKU={chooseSKU}
                 handleCloseSKU={handleCloseSKU}
               />
-            </Item>
+            </Item> */}
             <Item>
               <Button
                 sx={{
@@ -220,7 +262,13 @@ const WatchlistTable = () => {
               >
                 Edit
               </Button>
-              <Edit edit={edit} data={data} setData={setData} handleCloseEdit={handleCloseEdit} />
+              <Edit
+                edit={edit}
+                data={data}
+                view={view}
+                setData={setData}
+                handleCloseEdit={handleCloseEdit}
+              />
             </Item>
             <Item>
               <Button
@@ -235,30 +283,20 @@ const WatchlistTable = () => {
               >
                 Remove
               </Button>
-              <Remove remove={remove} data={data} setData={setData} handleCloseRemove={handleCloseRemove} />
-            </Item>
-            <Item>
-              <Button
-                sx={{
-                  minWidth: { xs: "100%" },
-                  border: "1px solid #ced4da",
-                  fontSize: "13px",
-                  textTransform: "capitalize",
-                }}
-                color="inherit"
-                onClick={handleShowLayout("paper")}
-              >
-                Layout
-              </Button>
-              <Layout
-                layout={layout}
-                handleCloseLayout={handleCloseLayout}
-                scroll={scroll}
+              <Remove
+                remove={remove}
+                view={view}
+                data={data}
+                setData={setData}
+                handleCloseRemove={handleCloseRemove}
               />
             </Item>
           </Stack>
+          </Box>
+           
         ) : (
-          <Stack
+            <Box sx={{ border: "1px solid #ced4da", borderRadius: 1, mx: 5 }}>
+              <Stack
             direction={{ xs: "column", sm: "row" }}
             spacing={{ xs: 1, sm: 1, md: 1 }}
             sx={{ m: 3 }}
@@ -308,68 +346,61 @@ const WatchlistTable = () => {
                         <CloseOutlinedIcon />
                       </IconButton>
                     </Box>
-                    
-                      <TextField
-                        fullWidth
-                        sx={{ mt: 2, mb: 5 }}
-                        id="outlined-basic"
-                        label="Enter Watchlist Title"
-                        variant="outlined"
-                        value={newD}
-                        onChange={(e) => {
-                          setNewD(e.target.value);
-                        }}
-                      />
-                      <Box sx={{ textAlign: "end", mb: 2 }}>
-                        {newD ? (
-                          <Button
-                            size="small"
-                            sx={{ mx: 2 }}
-                            variant="contained"
-                            color="inherit"
-                            onClick={() => {
-                              setNewD('');
-                              setData([
-                                ...data,
-                                { id: nextId++, name: newD }
-                              ]);
-                            }}
-                          >
-                            Create
-                          </Button>
-                        ) : (
-                          <Button
-                            disabled
-                            size="small"
-                            sx={{ mx: 2 }}
-                            variant="contained"
-                            color="inherit"
-                            type="submit"
-                          >
-                            Create
-                          </Button>
-                        )}
+
+                    <TextField
+                      fullWidth
+                      sx={{ mt: 2, mb: 5 }}
+                      id="outlined-basic"
+                      label="Enter Watchlist Title"
+                      variant="outlined"
+                      value={newD}
+                      onChange={(e) => {
+                        setNewD(e.target.value);
+                      }}
+                    />
+                    <Box sx={{ textAlign: "end", mb: 2 }}>
+                      {newD ? (
                         <Button
                           size="small"
-                          variant="outlined"
-                          color="error"
-                          onClick={handleCloseNewD}
+                          sx={{ mx: 2 }}
+                          variant="contained"
+                          color="inherit"
+                          onClick={() => {
+                            setNewD("");
+                            setData([...data, { id: traceId, name: newD }]);
+                          }}
                         >
-                          Cancel
+                          Create
                         </Button>
-                      </Box>
-                    
+                      ) : (
+                        <Button
+                          disabled
+                          size="small"
+                          sx={{ mx: 2 }}
+                          variant="contained"
+                          color="inherit"
+                          type="submit"
+                        >
+                          Create
+                        </Button>
+                      )}
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        color="error"
+                        onClick={handleCloseNewD}
+                      >
+                        Cancel
+                      </Button>
+                    </Box>
                   </Box>
                 </Fade>
               </Modal>
             </Item>
           </Stack>
+            </Box>   
         )}
-
-        <Box sx={{ my: 4 }}>
-          <SkuTable />
-        </Box>
-      </Box>
+      
     </>
   );
 };

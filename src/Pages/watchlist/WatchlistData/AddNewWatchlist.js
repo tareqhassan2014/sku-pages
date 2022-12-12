@@ -21,8 +21,9 @@ const style = {
   py: 1,
 };
 
-const AddNewWatchlist = ({ addNew, handleCloseNew,data, setData, nextId }) => {
+const AddNewWatchlist = ({ addNew, handleCloseNew,data, setData }) => {
   const [title, setTitle] = useState("");
+  let traceId = Math.floor(Math.random() * 10000);
   return (
     <>
       <Modal
@@ -66,7 +67,6 @@ const AddNewWatchlist = ({ addNew, handleCloseNew,data, setData, nextId }) => {
               value={title}
               onChange={(e) => {
                 setTitle(e.target.value);
-                console.log(title);
               }}
             />
             <Box sx={{textAlign:'end',mb:2}}>
@@ -80,8 +80,9 @@ const AddNewWatchlist = ({ addNew, handleCloseNew,data, setData, nextId }) => {
                               setTitle('');
                               setData([
                                 ...data,
-                                { id: nextId++, name: title }
+                                { id: traceId, name: title }
                               ]);
+                              handleCloseNew();
                             }}
                           >
                             Create

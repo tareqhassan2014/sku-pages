@@ -21,7 +21,7 @@ const style = {
   py: 1,
 };
 
-const AddNewWatchlist = ({ addNew, handleCloseNew }) => {
+const AddNewWatchlist = ({ addNew, handleCloseNew,data, setData, nextId }) => {
   const [title, setTitle] = useState("");
   return (
     <>
@@ -70,8 +70,42 @@ const AddNewWatchlist = ({ addNew, handleCloseNew }) => {
               }}
             />
             <Box sx={{textAlign:'end',mb:2}}>
-              <Button sx={{mx:2}} variant="outlined" color="inherit" onClick={handleCloseNew}>Create</Button>
-              <Button variant="contained" color="error" onClick={handleCloseNew}>Close</Button>  
+            {title ? (
+                          <Button
+                            size="small"
+                            sx={{ mx: 2 }}
+                            variant="contained"
+                            color="inherit"
+                            onClick={() => {
+                              setTitle('');
+                              setData([
+                                ...data,
+                                { id: nextId++, name: title }
+                              ]);
+                            }}
+                          >
+                            Create
+                          </Button>
+                        ) : (
+                          <Button
+                            disabled
+                            size="small"
+                            sx={{ mx: 2 }}
+                            variant="contained"
+                            color="inherit"
+                            type="submit"
+                          >
+                            Create
+                          </Button>
+                        )}
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          color="error"
+                          onClick={handleCloseNew}
+                        >
+                          Cancel
+                        </Button>  
             </Box>
           </Box>
         </Fade>

@@ -26,7 +26,6 @@ import Backdrop from "@mui/material/Backdrop";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
-import { useForm } from "react-hook-form";
 
 const styleM = {
   position: "absolute",
@@ -89,16 +88,17 @@ const WatchlistTable = () => {
   };
 
   /* New */
-  const { register, handleSubmit, reset } = useForm();
   const [newD, setNewD] = useState("");
   const [data, setData] = useState("");
+  console.log(data);
   const [openNew, setOpenNew] = useState(false);
   const handleCloseNewD = () => setOpenNew(false);
   const handleShowNewD = () => setOpenNew(true);
+  let nextId = 0;
   return (
     <>
       <Box sx={{ border: "1px solid #ced4da", borderRadius: 1, m: 5 }}>
-        {data ? (
+        {data?.length ? (
           <Stack
             direction={{ xs: "column", sm: "row" }}
             spacing={{ xs: 1, sm: 1, md: 1 }}
@@ -157,8 +157,11 @@ const WatchlistTable = () => {
                     <em>None</em>
                   </MenuItem>
                   <MenuItem value="Amazon">Amazon</MenuItem>
-                  <MenuItem value="None">Noon</MenuItem>
-                  <MenuItem value="None">Noon</MenuItem>
+                  {
+                    data?.map(mi=>(
+                      <MenuItem value={mi?.name}>{mi?.name}</MenuItem>
+                    ))
+                  }
                 </Select>
               </FormControl>
             </Item>
@@ -179,6 +182,8 @@ const WatchlistTable = () => {
               </Button>
               <AddNewWatchlist
                 addNew={addNew}
+                data={data} setData={setData} 
+                nextId={nextId}
                 handleCloseNew={handleCloseNew}
               />
             </Item>
@@ -215,7 +220,7 @@ const WatchlistTable = () => {
               >
                 Edit
               </Button>
-              <Edit edit={edit} handleCloseEdit={handleCloseEdit} />
+              <Edit edit={edit} data={data} setData={setData} handleCloseEdit={handleCloseEdit} />
             </Item>
             <Item>
               <Button
@@ -230,7 +235,7 @@ const WatchlistTable = () => {
               >
                 Remove
               </Button>
-              <Remove remove={remove} handleCloseRemove={handleCloseRemove} />
+              <Remove remove={remove} data={data} setData={setData} handleCloseRemove={handleCloseRemove} />
             </Item>
             <Item>
               <Button
@@ -303,23 +308,16 @@ const WatchlistTable = () => {
                         <CloseOutlinedIcon />
                       </IconButton>
                     </Box>
-                    <form
-                      onSubmit={handleSubmit((data) => {
-                        setData(JSON.stringify(data));
-                        reset();
-                      })}
-                    >
+                    
                       <TextField
                         fullWidth
                         sx={{ mt: 2, mb: 5 }}
                         id="outlined-basic"
                         label="Enter Watchlist Title"
                         variant="outlined"
-                        {...register("newData")}
                         value={newD}
                         onChange={(e) => {
                           setNewD(e.target.value);
-                          console.log(newD);
                         }}
                       />
                       <Box sx={{ textAlign: "end", mb: 2 }}>
@@ -329,7 +327,13 @@ const WatchlistTable = () => {
                             sx={{ mx: 2 }}
                             variant="contained"
                             color="inherit"
-                            type="submit"
+                            onClick={() => {
+                              setNewD('');
+                              setData([
+                                ...data,
+                                { id: nextId++, name: newD }
+                              ]);
+                            }}
                           >
                             Create
                           </Button>
@@ -354,7 +358,7 @@ const WatchlistTable = () => {
                           Cancel
                         </Button>
                       </Box>
-                    </form>
+                    
                   </Box>
                 </Fade>
               </Modal>

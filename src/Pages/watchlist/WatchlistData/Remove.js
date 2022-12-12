@@ -22,7 +22,7 @@ const style = {
 };
 
 
-const Remove = ({remove, handleCloseRemove}) => {
+const Remove = ({remove, handleCloseRemove,data,setData}) => {
     return (
       <>
         <Modal
@@ -62,10 +62,16 @@ const Remove = ({remove, handleCloseRemove}) => {
                   component="h3"
                   sx={{ mt: 2, mb: 5, color:"GrayText" }}
                 >
-                  Are you sure you want to remove '' watchlist?
+                  Are you sure you want to remove '{data[0]?.name}' watchlist?
                 </Typography>
               <Box sx={{textAlign:'end',mb:2}}>
-                <Button sx={{mx:2}} variant="outlined" color="inherit" onClick={handleCloseRemove}>Remove</Button>
+                <Button sx={{mx:2}} variant="outlined" color="inherit"onClick={() => {
+              setData(
+                data.filter(a =>
+                  a.id !== data[0].id
+                )
+              );
+            }}>Remove</Button>
                 <Button variant="contained" color="error" onClick={handleCloseRemove}>Close</Button>  
               </Box>
             </Box>

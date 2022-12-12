@@ -74,7 +74,9 @@ const SkuTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableCell sx={{backgroundColor:"#eef2f7",width:150, color:"#6c757d", borderBottom:"0px"}}>No Data Available</TableCell>
+            <TableRow>
+              <TableCell sx={{backgroundColor:"#eef2f7",width:150, color:"#6c757d", borderBottom:"0px"}}>No Data Available</TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>

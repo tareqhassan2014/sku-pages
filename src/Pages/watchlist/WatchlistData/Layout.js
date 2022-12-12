@@ -11,391 +11,226 @@ import Checkbox from "@mui/material/Checkbox";
 import { BiGridVertical } from "react-icons/bi";
 
 const Layout = ({ layout, scroll, handleCloseLayout }) => {
+  const descriptionElementRef = useRef(null);
+  useEffect(() => {
+    if (layout) {
+      const { current: descriptionElement } = descriptionElementRef;
+      if (descriptionElement !== null) {
+        descriptionElement.focus();
+      }
+    }
+  }, [layout]);
 
-    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+  const draggables = document.querySelectorAll(".draggable");
+  const containers = document.querySelectorAll(".container");
 
-    const descriptionElementRef = useRef(null);
-    useEffect(() => {
-        if (layout) {
-            const { current: descriptionElement } = descriptionElementRef;
-            if (descriptionElement !== null) {
-                descriptionElement.focus();
-            }
+  draggables.forEach((draggable) => {
+    draggable.addEventListener("dragstart", () => {
+      draggable.classList.add("dragging");
+    });
+
+    draggable.addEventListener("dragend", () => {
+      draggable.classList.remove("dragging");
+    });
+  });
+
+  containers.forEach((container) => {
+    container.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      const afterElement = getDragAfterElement(container, e.clientY);
+      const draggable = document.querySelector(".dragging");
+      if (afterElement == null) {
+        container.appendChild(draggable);
+      } else {
+        container.insertBefore(draggable, afterElement);
+      }
+    });
+  });
+
+  function getDragAfterElement(container, y) {
+    const draggableElements = [
+      ...container.querySelectorAll(".draggable:not(.dragging)"),
+    ];
+
+    return draggableElements.reduce(
+      (closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
         }
-    }, [layout]);
-    return (
-        <>
-            <Dialog
-                open={layout}
-                onClose={handleCloseLayout}
-                scroll={scroll}
-                aria-labelledby="scroll-dialog-title"
-                aria-describedby="scroll-dialog-description"
-            >
-                <DialogTitle id="scroll-dialog-title">Layout Setting</DialogTitle>
-                <DialogContent sx={{minWidth:"35vw"}} dividers={scroll === "paper"}>
-                    <DialogContentText
-                        id="scroll-dialog-description"
-                        ref={descriptionElementRef}
-                        tabIndex={-1}
-                    >
-                    <span style={{fontSize:"12px"}}> Please choose metrics to view from the list below</span>
-                       
-                    </DialogContentText>
-                    <FormGroup>
+      },
+      { offset: Number.NEGATIVE_INFINITY }
+    ).element;
+  }
 
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        disabled
-                                        control={<Checkbox />}
-                                        checked
-                                        label="SKU"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        disabled
-                                        control={<Checkbox />}
-                                        checked
-                                        label="Fulfilment Type"
-                                    />
-                                </>
-                            } />
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        disabled
-                                        control={<Checkbox />}
-                                        checked
-                                        label="Rank"
-                                    />
-                                </>
-                            } />
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        disabled
-                                        control={<Checkbox />}
-                                        checked
-                                        label="Rate"
-                                    />
-                                </>
-                            } />
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        disabled
-                                        control={<Checkbox />}
-                                        checked
-                                        label=" SKU Marketplace"
-                                    />
-                                </>
-                            } />
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        disabled
-                                        control={<Checkbox />}
-                                        checked
-                                        label="Stores"
-                                    />
-                                </>
-                            } />
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        disabled
-                                        control={<Checkbox />}
-                                        checked
-                                        label="Chg 24H"
-                                    />
-                                </>
-                            } />
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        disabled
-                                        control={<Checkbox />}
-                                        checked
-                                        label="Buybox Sale Price"
-                                    />
-                                </>
-                            } />
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        disabled
-                                        control={<Checkbox />}
-                                        checked
-                                        label="Max Offer Price"
-                                    />
-                                </>
-                            } />
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        disabled
-                                        control={<Checkbox />}
-                                        checked
-                                        label="Min Offer Price"
-                                    />
-                                </>
-                            } />
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        disabled
-                                        control={<Checkbox />}
-                                        checked
-                                        label="SKU Status"
-                                    />
-                                </>
-                            } />
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        disabled
-                                        control={<Checkbox />}
-                                        checked
-                                        label="E Opp to stock"
-                                    />
-                                </>
-                            } />
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="E Opp To Fulfilment"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="Trade Volume"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="Tags"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="ASP"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="Vol (24h)/MCap"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="Estimated SOH"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="DOH"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="ENR"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="Max Investment"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="Min Investment"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="EQTI"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="EM"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="Estimated SU Last 24H"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="E Marketplace cap"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="E Opp to Amazon Fulfilment"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="E Opp to Noon Fulfilment"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="Demand"
-                                    />
-                                </>
-                            } />
-
-                        <Chip
-                            size="small"
-                            sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', py: 2, mb: 1, backgroundColor: "#EFF2F5" }} icon={<BiGridVertical />} label={
-                                <>
-                                    <FormControlLabel
-                                        control={<Checkbox  {...label} />}
-                                        label="Supply"
-                                    />
-                                </>
-                            } />
-
-                    </FormGroup>
-                </DialogContent>
-                <DialogActions>
-                    <Button color="inherit" variant="outlined" onClick={handleCloseLayout}>save</Button>
-                    <Button color="warning" variant="outlined" onClick={handleCloseLayout}>Reset All</Button>
-                </DialogActions>
-            </Dialog>
-        </>
-    );
+  const layoutTitle = [
+    {
+      title: "#",
+      chkd: "true",
+    },
+    {
+      title: "Name",
+      chkd: "true",
+      dsbl: "true",
+    },
+    {
+      title: "Price",
+      chkd: "true",
+    },
+    {
+      title: "Price Change (24h)",
+      chkd: "true",
+    },
+    {
+      title: "Price Change (7d)",
+      chkd: "true",
+    },
+    {
+      title: "Price Change (30d)",
+      chkd: "true",
+    },
+    {
+      title: "Market Cap",
+      chkd: "true",
+    },
+    {
+      title: "Fully DMC",
+      chkd: "true",
+    },
+    {
+      title: "Volume (24h)",
+      chkd: "true",
+    },
+    {
+      title: "Circ. Supply",
+      chkd: "false",
+    },
+    {
+      title: "Price Graph (7d)",
+      chkd: "false",
+    },
+    {
+      title: "Price Graph (30d)",
+      chkd: "false",
+    },
+    {
+      title: "Price Change (14d)",
+      chkd: "false",
+    },
+    {
+      title: "Price Change (30d)",
+      chkd: "false",
+    },
+    {
+      title: "Price Change (14d)",
+      chkd: "false",
+    },
+    {
+      title: "Price Change (MTD)",
+      chkd: "false",
+    },
+    {
+      title: "Price Change (3m)",
+      chkd: "false",
+    },
+    {
+      title: "Price Change (6m)",
+      chkd: "false",
+    },
+    {
+      title: "Price Change (YTD)",
+      chkd: "false",
+    },
+    {
+      title: "Price Change (Year)",
+      chkd: "false",
+    },
+    {
+      title: "Price Change (Q1)",
+      chkd: "false",
+    },
+    {
+      title: "Price Change (Q2)",
+      chkd: "false",
+    },
+  ];
+  return (
+    <>
+      <Dialog
+        open={layout}
+        onClose={handleCloseLayout}
+        scroll={scroll}
+        aria-labelledby="scroll-dialog-title"
+        aria-describedby="scroll-dialog-description"
+      >
+        <DialogTitle id="scroll-dialog-title">Layout Setting</DialogTitle>
+        <DialogContent sx={{ minWidth: "35vw" }} dividers={scroll === "paper"}>
+          <DialogContentText
+            id="scroll-dialog-description"
+            ref={descriptionElementRef}
+            tabIndex={-1}
+          >
+            <span style={{ fontSize: "12px" }}>
+              {" "}
+              Please choose metrics to view from the list below
+            </span>
+          </DialogContentText>
+          <FormGroup className="container">
+            {layoutTitle.map((lt, index) => (
+              <Chip
+                key={index}
+                className="draggable"
+                style={{ cursor: "move" }}
+                draggable="true"
+                size="small"
+                sx={{
+                  display: "flex",
+                  justifyContent: "start",
+                  alignItems: "center",
+                  py: 2,
+                  mb: 1,
+                  backgroundColor: "#EFF2F5",
+                }}
+                icon={<BiGridVertical />}
+                label={
+                  <>
+                    <FormControlLabel
+                      disabled={lt?.dsbl ? true : false}
+                      control={
+                        <Checkbox
+                          defaultChecked={lt.chkd === "true" ? true : false}
+                        />
+                      }
+                      label={lt.title}
+                    />
+                  </>
+                }
+              />
+            ))}
+          </FormGroup>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            color="inherit"
+            variant="outlined"
+            onClick={handleCloseLayout}
+          >
+            save
+          </Button>
+          <Button
+            color="warning"
+            variant="outlined"
+            onClick={handleCloseLayout}
+          >
+            Reset All
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
 };
 
 export default Layout;

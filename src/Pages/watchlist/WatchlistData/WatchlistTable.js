@@ -7,7 +7,7 @@ import {
   Button,
   FormControl,
   IconButton,
- /*  InputBase,
+  /*  InputBase,
   InputLabel, */
   MenuItem,
   OutlinedInput,
@@ -98,7 +98,7 @@ const WatchlistTable = () => {
   const handleCloseNew = () => setAddNew(false);
   const handleShowNew = () => setAddNew(true);
   // Pop -Up chooseSKU
-/*   const [chooseSKU, setChooseSKU] = useState(false);
+  /*   const [chooseSKU, setChooseSKU] = useState(false);
   const handleCloseSKU = () => setChooseSKU(false);
   const handleShowSKU = () => setChooseSKU(true); */
 
@@ -121,19 +121,16 @@ const WatchlistTable = () => {
   const handleShowNewD = () => setOpenNew(true);
   let traceId = Math.floor(Math.random() * 10000);
   const [view, setView] = useState(false);
-  // console.log(view);
+  console.log(view);
 
   return (
     <>
-    <Box sx={{my:2}}>
-          <Typography sx={{pb:1,mx:5}}>My Watchlist</Typography>
-    </Box>
-    {
-      search?.length !==0 && <DataStorage/>
-    }
-        {data?.length ? (
-          
-            <Box sx={{ border: "1px solid #ced4da", borderRadius: 1, mx: 5 }}>
+      <Box sx={{ my: 2 }}>
+        <Typography sx={{ pb: 1, mx: 5 }}>My Watchlist</Typography>
+      </Box>
+      {search?.length !== 0 && <DataStorage />}
+      {data?.length ? (
+        <Box sx={{ border: "1px solid #ced4da", borderRadius: 1, mx: 5 }}>
           <Stack
             direction={{ xs: "column", sm: "row" }}
             spacing={{ xs: 1, sm: 1, md: 1 }}
@@ -151,7 +148,7 @@ const WatchlistTable = () => {
                 /> */}
               <Autocomplete
                 id="optn-select-demo"
-                sx={{ minWidth: { xs: "100%", md: 250 } }}
+                sx={{ minWidth: { xs: "100%", md: 250 },backgroundColor: "#EFF2F5",'.MuiOutlinedInput-notchedOutline': { border: 0,borderRadius:3},borderRadius:3}}
                 options={optn}
                 autoHighlight
                 getOptionLabel={(option) => option.slct}
@@ -177,18 +174,22 @@ const WatchlistTable = () => {
                 sx={{ minWidth: { xs: "100%", md: 250 } }}
                 size="small"
               >
-                {/*  <InputLabel sx={{ fontSize: "13px" }} id="demo-select-small">
-                  Select
-                </InputLabel> */}
                 <Select
                   sx={{
                     fontSize: "13px",
                     textTransform: "capitalize",
                     backgroundColor: "#EFF2F5",
-                    "&:active": { border: "0px" },
+                    '.MuiOutlinedInput-notchedOutline': { border: 0,borderRadius:3},borderRadius:3
                   }}
-                  value={select}
+                  displayEmpty
+                  value={view?.name || select}
                   input={<OutlinedInput />}
+                  renderValue={(selected) => {
+                    if (selected.length === 0) {
+                      return <>{data[0].name}</>;
+                    }
+                    return (view?.name || data[0].name);
+                  }}
                   inputProps={{ "aria-label": "Without label" }}
                   onChange={(e) => {
                     setSelect(e.target.value);
@@ -200,9 +201,9 @@ const WatchlistTable = () => {
                         setView(mi);
                       }}
                       key={mi?.id}
-                      value={mi?.name}
+                      value={mi.name}
                     >
-                      {mi?.name}
+                      {mi.name}
                     </MenuItem>
                   ))}
                 </Select>
@@ -266,6 +267,7 @@ const WatchlistTable = () => {
                 edit={edit}
                 data={data}
                 view={view}
+                setView={setView}
                 setData={setData}
                 handleCloseEdit={handleCloseEdit}
               />
@@ -292,11 +294,10 @@ const WatchlistTable = () => {
               />
             </Item>
           </Stack>
-          </Box>
-           
-        ) : (
-            <Box sx={{ border: "1px solid #ced4da", borderRadius: 1, mx: 5 }}>
-              <Stack
+        </Box>
+      ) : (
+        <Box sx={{ border: "1px solid #ced4da", borderRadius: 1, mx: 5 }}>
+          <Stack
             direction={{ xs: "column", sm: "row" }}
             spacing={{ xs: 1, sm: 1, md: 1 }}
             sx={{ m: 3 }}
@@ -398,9 +399,8 @@ const WatchlistTable = () => {
               </Modal>
             </Item>
           </Stack>
-            </Box>   
-        )}
-      
+        </Box>
+      )}
     </>
   );
 };

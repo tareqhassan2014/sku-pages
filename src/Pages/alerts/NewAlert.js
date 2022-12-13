@@ -51,7 +51,7 @@ const NewAlert = () => {
               >
                 <Button
                   variant="contained"
-                  sx={{ p: "8px", boxShadow: "none" }}
+                  sx={{ py: "6px", boxShadow: "none" }}
                   aria-label="search"
                 >
                   <SearchIcon />

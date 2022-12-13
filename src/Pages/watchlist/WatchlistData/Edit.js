@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -21,66 +21,93 @@ const style = {
   py: 1,
 };
 
-const Edit = ({ edit, handleCloseEdit, data, setData, view }) => {
-    const [update, setUpdate] = useState("");
+const Edit = ({ edit, handleCloseEdit, data, setData, view, setView }) => {
+  const [inputValue, setInputValue] = useState("");
 
-    const up = [...data,{name:update}]
-    // console.log(up);
-    
-    return (
-      <>
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={edit}
-          onClose={handleCloseEdit}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-          <Fade in={edit}>
-            <Box sx={style}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  mb: 1,
-                }}
+  const updateArrayValue = (id, newValue) => {
+    let newArray = data.map((item) => {
+      if (item.id === id) {
+        return { ...item, name: newValue };
+      }
+      return item;
+    });
+
+    const up = newArray.find((u) => {
+      return u.id === view.id;
+    });
+    setData(newArray);
+    handleCloseEdit();
+    setInputValue("");
+    setView(up);
+  };
+
+  return (
+    <>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={edit}
+        onClose={handleCloseEdit}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={edit}>
+          <Box sx={style}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: 1,
+              }}
+            >
+              <Typography
+                id="transition-modal-title"
+                variant="h6"
+                component="h2"
               >
-                <Typography
-                  id="transition-modal-title"
-                  variant="h6"
-                  component="h2"
-                >
-                  Edit watchlist
-                </Typography>
-                <IconButton color="error" onClick={handleCloseEdit}>
-                  <CloseOutlinedIcon />
-                </IconButton>
-              </Box>
-              <TextField
-                fullWidth
-                sx={{ mt: 2, mb: 5 }}
-                id="outlined-basic"
-                label={view?.name || data[0].name}
-                variant="outlined"
-                value={update}
-                onChange={(e) => {
-                  setUpdate(e.target.value);
-                }}
-              />
-              <Box sx={{textAlign:'end',mb:2}}>
-                <Button sx={{mx:2}} variant="outlined" color="inherit">Update</Button>
-                <Button variant="contained" color="error" onClick={handleCloseEdit}>Close</Button>  
-              </Box>
+                Edit watchlist
+              </Typography>
+              <IconButton color="error" onClick={handleCloseEdit}>
+                <CloseOutlinedIcon />
+              </IconButton>
             </Box>
-          </Fade>
-        </Modal>
-      </>
-    );
+            <TextField
+              fullWidth
+              sx={{ mt: 2, mb: 5 }}
+              id="outlined-basic"
+              label={view?.name || data[0].name}
+              variant="outlined"
+              value={inputValue}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+              }}
+            />
+            <Box sx={{ textAlign: "end", mb: 2 }}>
+              <Button
+                sx={{ mx: 2 }}
+                variant="outlined"
+                color="inherit"
+                onClick={() => updateArrayValue(view.id, inputValue)}
+              >
+                Update
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={handleCloseEdit}
+              >
+                Close
+              </Button>
+            </Box>
+          </Box>
+        </Fade>
+      </Modal>
+    </>
+  );
 };
 
 export default Edit;
